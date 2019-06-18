@@ -1,11 +1,8 @@
 const express = require('express')
 const redis = require('redis')
-const bodyParser = require('body-parser')
 
 const app = express()
 const client = redis.createClient(6379, '127.0.0.1')
-
-app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(express.static('./'))
 
