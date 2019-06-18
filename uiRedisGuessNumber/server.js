@@ -1,8 +1,6 @@
 var express = require('express');
 var app = express();
 
-var http = require('http');
-
 var redis = require('redis')
 var client = redis.createClient(6379,'127.0.0.1');
 
@@ -28,11 +26,9 @@ app.get('/guessNumber.html', function (req, res) {
 });
 
 app.post('/start', function (req, res) {
-	client.get('R',function(err, R) {
-		var rand = Math.round(Math.random() * 100)
-		client.set('R',rand)
-		res.send('OK')
-	})
+	var rand = Math.round(Math.random() * 100)
+	client.set('R',rand)
+	res.send('OK')
 });
 
 app.post('/guess', function(req,res) {
@@ -50,5 +46,5 @@ app.post('/guess', function(req,res) {
 	})		
 });
 // listen to port 3000
-var server = app.listen(3000);
+app.listen(3000);
 console.log('Server running at port 3000.')
