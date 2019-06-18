@@ -15,8 +15,8 @@ app.post('/start', function (req, res) {
 	res.send('OK')
 });
 
-app.post('/guess', function(req,res) {
-	var number = req.body['number']
+app.post('/:number', function(req,res) {
+	var number = req.params['number']
 	client.get('R',function(err, R) {
 		console.log(R)
 		if (err)

@@ -1,13 +1,9 @@
 function submit() {
-	var data = '{"number":-1}'
-	var obj = JSON.parse(data)
-	obj.number = document.getElementById("number").value
-	var n = Number(obj.number)
+	var n = Number(document.getElementById("number").value)
 	if (!isNaN(n)) {
 		$.ajax({
 			type:'post',
-			url:'http://localhost:3000/guess',
-			data:obj,
+			url:'http://localhost:3000/' + n,
 			async:false,
 			success:function(msg) {
 				document.getElementById("result").innerHTML = msg
