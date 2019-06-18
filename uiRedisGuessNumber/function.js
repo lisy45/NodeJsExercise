@@ -3,7 +3,7 @@ function submit() {
 	if (!isNaN(n)) {
 		$.ajax({
 			type: 'post',
-			url: 'http://localhost:3000/${n}',
+			url: 'http://localhost:3000/' + n,
 			async: false,
 			success(msg) {
 				document.getElementById('result').innerHTML = msg
