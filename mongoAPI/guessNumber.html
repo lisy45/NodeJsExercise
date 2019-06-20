@@ -1,0 +1,22 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="function.js"></script>
+</head>
+
+<body>
+	<h1>Number Guesser</h1>
+	<input type="text" id="name" name="name" value="Name" onfocus="empty(this);">
+	<input type="text" id="password" name="password" value="Password" onfocus="empty(this);">
+	<br>
+	<input type="button" value="login" onclick="login();">
+	<input type="button" value="register" onclick="register();">
+	<h2 id="result"></h2>
+	<input type="text" id="number" name="number" value="Guess A Number" onfocus="empty(this);">
+	<br>
+	<input type="button" value="start" onclick="start();">
+	<input type="button" value="submit" onclick="submit();">
+	<h2 id="result2"></h2>
+</body>
+</html>
