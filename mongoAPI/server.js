@@ -148,8 +148,8 @@ async function check(req, res) {
 		else res.send('equal')
 	}
 }
-app.post('/:number', (req, res) => {
-	check(req, res)
+app.post('/:number', async (req, res) => {
+	await check(req, res)
 })
 
 // listen to port 3000
