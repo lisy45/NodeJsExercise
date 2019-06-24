@@ -5,8 +5,10 @@ function postPromise(guess) {
 		rp.post(`http://127.0.0.1:3000/${guess}`)
 			.then((res) => {
 				console.log(`Guess:${guess} /:number returns ${res}`)
-				if (res === 'equal') resolve('Auto play completes')
-				else reject(res)
+				if (res === 'equal') {
+					console.log('Auto play completes')
+					resolve(guess)
+				} else reject(res)
 			})
 	})
 }
@@ -34,8 +36,8 @@ function playByPromise() {
 		.then((res) => {
 			if (res === 'OK') {
 				console.log('/start returns OK')
-				guessPromise(0, 1000000).then((msg) => {
-					console.log(msg)
+				guessPromise(0, 1000000).then((result) => {
+					console.log(`Number is ${result}`)
 				})
 			} else console.log('/start fails')
 		})
