@@ -1,39 +1,26 @@
 const rp = require('request-promise')
 
-function postAsync(guess) {
-	return new Promise((resolve, reject) => {
-		rp.post(`http://127.0.0.1:3000/${guess}`)
-			.then((res) => {
-				console.log(`Guess:${guess} /:number returns ${res}`)
-				if (res === 'equal') resolve('Auto play completes')
-				else reject(res)
-			})
-	})
+async function postAsync(guess) {
+	const res = await rp.post(`http://127.0.0.1:3000/${guess}`)
+	console.log(`Guess:${guess} /:number returns ${res}`)
+	if (res === 'equal') return ('Auto play completes')
+	return res
 }
 
 async function guessAsync(low, up) {
-	function recur(l, u) {
-		const guess = Math.round((l + u) / 2)
-		postAsync(guess)
-			.then((res) => {
-				console.log(res)
-			})
-			.catch((res) => {
-				if (res === 'bigger') recur(l, guess)
-				else if (res === 'smaller') recur(guess, u)
-			})
-	}
-	await recur(low, up)
+	const guess = Math.round((low + up) / 2)
+	const res = await postAsync(guess)
+	if (res === 'bigger') guessAsync(low, guess)
+	else if (res === 'smaller') guessAsync(guess, up)
+	else console.log(res)
 }
 
-function playByAsync() {
+async function playByAsync() {
 	console.log('Play by Async')
-	rp.post('http://127.0.0.1:3000/start')
-		.then((res) => {
-			if (res === 'OK') {
-				console.log('/start returns OK')
-				guessAsync(0, 1000000)
-			} else console.log('/start fails')
-		})
+	const res = await rp.post('http://127.0.0.1:3000/start')
+	if (res === 'OK') {
+		console.log('/start returns OK')
+		guessAsync(0, 1000000)
+	} else console.log('/start fails')
 }
 playByAsync()
