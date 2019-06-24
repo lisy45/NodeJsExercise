@@ -38,15 +38,14 @@ const optionLoginWrong = {
 	},
 }
 
-async function rpCheckUser(done) {
+async function rpCheckUser() {
 	const res1 = await rp.post('http://127.0.0.1:3000/checkUser').then()
 	res1.should.eql('success')
 	const res2 = await rp.post('http://127.0.0.1:3000/checkNumber').then()
 	res2.should.eql('success')
-	done()
 }
 
-async function rpRegister(done, opt) {
+async function rpRegister(opt) {
 	if (opt === 0) {
 		const res1 = await rp(optionRegisterSuccess).then()
 		res1.should.eql('success')
@@ -56,24 +55,23 @@ async function rpRegister(done, opt) {
 		const res3 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin').then()
 		res3.should.eql('The user is successfully deleted.')
 	}
-	done()
 }
 
 describe('API Test 1: /regster', () => {
-	it('The response of /register should be success if name is not repeated', (done) => {
-		rpRegister(done, 0)
+	it('The response of /register should be success if name is not repeated', async () => {
+		await rpRegister(0)
 	})
 
-	it('The response of /register should be repeated username if name is repeated', (done) => {
-		rpRegister(done, 1)
+	it('The response of /register should be repeated username if name is repeated', async () => {
+		await rpRegister(1)
 	})
 
-	it('The db should be empty', (done) => {
-		rpCheckUser(done)
+	it('The db should be empty', async () => {
+		await rpCheckUser()
 	})
 })
 
-async function rpLogin(done, opt) {
+async function rpLogin(opt) {
 	if (opt === 0) {
 		const res1 = await rp(optionLoginSuccess).then()
 		res1.should.eql('Username does not exist!')
@@ -90,24 +88,23 @@ async function rpLogin(done, opt) {
 		const res4 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin').then()
 		res4.should.eql('The user is successfully deleted.')
 	}
-	done()
 }
 
 describe('API Test 2: /login', () => {
-	it('The response of /login should be Username does not exist! if the name is not registeresd', (done) => {
-		rpLogin(done, 0)
+	it('The response of /login should be Username does not exist! if the name is not registeresd', async () => {
+		await rpLogin(0)
 	})
 
-	it('The response of /login should be Wrong password if the password is wrong', (done) => {
-		rpLogin(done, 1)
+	it('The response of /login should be Wrong password if the password is wrong', async () => {
+		await rpLogin(1)
 	})
 
-	it('The response of /login should be Hello admin if login successes', (done) => {
-		rpLogin(done, 2)
+	it('The response of /login should be Hello admin if login successes', async () => {
+		await rpLogin(2)
 	})
 
-	it('The db should be empty', (done) => {
-		rpCheckUser(done)
+	it('The db should be empty', async () => {
+		await rpCheckUser()
 	})
 })
 
@@ -139,8 +136,8 @@ describe('API Test 3: /start', () => {
 		rpStart(done)
 	})
 
-	it('The db should be empty', (done) => {
-		rpCheckUser(done)
+	it('The db should be empty', async () => {
+		await rpCheckUser()
 	})
 })
 
@@ -172,13 +169,13 @@ describe('API Test 4: /:number', () => {
 		npNumber(done)
 	})
 
-	it('The db should be empty', (done) => {
-		rpCheckUser(done)
+	it('The db should be empty', async () => {
+		await rpCheckUser()
 	})
 })
 
 describe('API Test End: ', () => {
-	it('The db should be empty', (done) => {
-		rpCheckUser(done)
+	it('The db should be empty', async () => {
+		await rpCheckUser()
 	})
 })
