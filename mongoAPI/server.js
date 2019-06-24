@@ -56,8 +56,7 @@ app.post('/checkNumber', (req, res) => {
 })
 
 async function register(req, res) {
-	const { name } = req.body
-	const { password } = req.body
+	const { name, password } = req.body
 	const existed = await User.findOne({ name })
 	if (existed)	res.send('repeated username')
 	else {
@@ -94,8 +93,7 @@ app.delete('/deleteuser/:username', (req, res) => {
 })
 
 async function login(req, res) {
-	const { name } = req.body
-	const { password } = req.body
+	const { name, password } = req.body
 	const existed = await User.findOne({ name })
 	if (!existed)	res.send('Username does not exist!')
 	else {
