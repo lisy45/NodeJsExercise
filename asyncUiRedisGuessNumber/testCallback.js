@@ -7,8 +7,10 @@ function guessCallback(low, up, callback) {
 			console.log(`Guess:${guess} /:number returns ${res}`)
 			if (res === 'smaller') return guessCallback(guess, up, callback)
 			if (res === 'bigger') return guessCallback(low, guess, callback)
-			return callback('Auto play completes')
+			console.log('Auto play completes')
+			return callback(null, guess)
 		})
+		.catch(err => callback(err, null))
 }
 
 function playByCallback() {
@@ -17,8 +19,9 @@ function playByCallback() {
 		.then((res) => {
 			if (res === 'OK') {
 				console.log('/start returns OK')
-				guessCallback(0, 1000000, (msg) => {
-					console.log(msg)
+				guessCallback(0, 1000000, (err, result) => {
+					if (err) console.log(err)
+					else console.log(`Number is ${result}`)
 				})
 			} else console.log('/start fails')
 		})
