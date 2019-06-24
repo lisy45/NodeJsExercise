@@ -39,20 +39,20 @@ const optionLoginWrong = {
 }
 
 async function rpCheckUser() {
-	const res1 = await rp.post('http://127.0.0.1:3000/checkUser').then()
+	const res1 = await rp.post('http://127.0.0.1:3000/checkUser')
 	res1.should.eql('success')
-	const res2 = await rp.post('http://127.0.0.1:3000/checkNumber').then()
+	const res2 = await rp.post('http://127.0.0.1:3000/checkNumber')
 	res2.should.eql('success')
 }
 
 async function rpRegister(opt) {
 	if (opt === 0) {
-		const res1 = await rp(optionRegisterSuccess).then()
+		const res1 = await rp(optionRegisterSuccess)
 		res1.should.eql('success')
 	} else if (opt === 1) {
-		const res2 = await rp(optionRegisterSuccess).then()
+		const res2 = await rp(optionRegisterSuccess)
 		res2.should.eql('repeated username')
-		const res3 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin').then()
+		const res3 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin')
 		res3.should.eql('The user is successfully deleted.')
 	}
 }
@@ -73,19 +73,19 @@ describe('API Test 1: /regster', () => {
 
 async function rpLogin(opt) {
 	if (opt === 0) {
-		const res1 = await rp(optionLoginSuccess).then()
+		const res1 = await rp(optionLoginSuccess)
 		res1.should.eql('Username does not exist!')
 	} else {
-		const res2 = await rp(optionRegisterSuccess).then()
+		const res2 = await rp(optionRegisterSuccess)
 		res2.should.eql('success')
 		if (opt === 1) {
-			const res3 = await rp(optionLoginWrong).then()
+			const res3 = await rp(optionLoginWrong)
 			res3.should.eql('Wrong password')
 		} else if (opt === 2) {
-			const res3 = await rp(optionLoginSuccess).then()
+			const res3 = await rp(optionLoginSuccess)
 			res3.should.eql('Hello admin')
 		}
-		const res4 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin').then()
+		const res4 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin')
 		res4.should.eql('The user is successfully deleted.')
 	}
 }
@@ -109,7 +109,7 @@ describe('API Test 2: /login', () => {
 })
 
 async function rpStart(done) {
-	const res1 = await rp(optionRegisterSuccess).then()
+	const res1 = await rp(optionRegisterSuccess)
 	res1.should.eql('success')
 	request(optionLoginSuccess, (err, res2, body) => {
 		body.should.eql('Hello admin')
@@ -142,7 +142,7 @@ describe('API Test 3: /start', () => {
 })
 
 async function npNumber(done) {
-	const res1 = await rp(optionRegisterSuccess).then()
+	const res1 = await rp(optionRegisterSuccess)
 	res1.should.eql('success')
 	request(optionLoginSuccess, (err, res2, body) => {
 		body.should.eql('Hello admin')
