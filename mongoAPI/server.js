@@ -36,7 +36,7 @@ app.use(session({
 }))
 
 async function checkUser(req, res) {
-	const count = await User.countDocuments({}).exec()
+	const count = await User.countDocuments({})
 	if (count === 0) res.send('success')
 	else res.send('fail')
 }
@@ -46,7 +46,7 @@ app.post('/checkUser', (req, res) => {
 })
 
 async function checkNumber(req, res) {
-	const count = await number.countDocuments({}).exec()
+	const count = await number.countDocuments({})
 	if (count === 0) res.send('success')
 	else res.send('fail')
 }
@@ -58,7 +58,7 @@ app.post('/checkNumber', (req, res) => {
 async function register(req, res) {
 	const { name } = req.body
 	const { password } = req.body
-	const existed = await User.findOne({ name }).exec()
+	const existed = await User.findOne({ name })
 	if (existed)	res.send('repeated username')
 	else {
 		const salt = Math.random().toString().slice(2, 5)
@@ -81,10 +81,10 @@ app.post('/register', (req, res) => {
 
 async function deleteUser(req, res) {
 	const name = req.params.username
-	const removed = await User.findOne({ name }).exec()
+	const removed = await User.findOne({ name })
 	if (removed != null) {
-		await number.findOneAndDelete({ userid: removed._id }).exec()
-		await User.deleteOne({ name }).exec()
+		await number.findOneAndDelete({ userid: removed._id })
+		await User.deleteOne({ name })
 		res.send('The user is successfully deleted.')
 	} else res.send('Username does not exist!')
 }
@@ -96,7 +96,7 @@ app.delete('/deleteuser/:username', (req, res) => {
 async function login(req, res) {
 	const { name } = req.body
 	const { password } = req.body
-	const existed = await User.findOne({ name }).exec()
+	const existed = await User.findOne({ name })
 	if (!existed)	res.send('Username does not exist!')
 	else {
 		const { salt } = existed
@@ -105,7 +105,7 @@ async function login(req, res) {
 		const cryptpwd = md5.update(saltpwd).digest('hex')
 		if (cryptpwd !== existed.password) res.send('Wrong password')
 		else {
-			const num = await number.findOne({ userid: existed._id }).exec()
+			const num = await number.findOne({ userid: existed._id })
 			if (!num) {
 				const newNumber = new number({
 					userid: existed._id,
@@ -127,7 +127,7 @@ async function start(req, res) {
 	if (!sessUserid) res.send('Please login')
 	else {
 		const randnum = Math.round(Math.random() * 100)
-		const existed = await number.findOne({ userid: sessUserid }).exec()
+		const existed = await number.findOne({ userid: sessUserid })
 		existed.num = randnum
 		await existed.save()
 		res.send('success')
@@ -143,7 +143,7 @@ async function check(req, res) {
 	if (!sessUserid) res.send('Please login')
 	else {
 		const guess = req.params.number
-		const existed = await number.findOne({ userid: sessUserid }).exec()
+		const existed = await number.findOne({ userid: sessUserid })
 		const answer = existed.num
 		if (Number(guess) < Number(answer)) res.send('smaller')
 		else if (Number(guess) > Number(answer)) res.send('bigger')
