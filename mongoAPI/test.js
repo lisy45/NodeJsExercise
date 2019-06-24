@@ -39,10 +39,8 @@ const optionLoginWrong = {
 }
 
 async function rpCheckUser() {
-	const res1 = await rp.post('http://127.0.0.1:3000/checkUser')
+	const res1 = await rp.post('http://127.0.0.1:3000/checkUser/admin')
 	res1.should.eql('success')
-	const res2 = await rp.post('http://127.0.0.1:3000/checkNumber')
-	res2.should.eql('success')
 }
 
 async function rpRegister(opt) {
@@ -66,7 +64,7 @@ describe('API Test 1: /regster', () => {
 		await rpRegister(1)
 	})
 
-	it('The db should be empty', async () => {
+	it('The test should not leave data in DB', async () => {
 		await rpCheckUser()
 	})
 })
@@ -103,7 +101,7 @@ describe('API Test 2: /login', () => {
 		await rpLogin(2)
 	})
 
-	it('The db should be empty', async () => {
+	it('The test should not leave data in DB', async () => {
 		await rpCheckUser()
 	})
 })
@@ -136,7 +134,7 @@ describe('API Test 3: /start', () => {
 		rpStart(done)
 	})
 
-	it('The db should be empty', async () => {
+	it('The test should not leave data in DB', async () => {
 		await rpCheckUser()
 	})
 })
@@ -169,13 +167,13 @@ describe('API Test 4: /:number', () => {
 		npNumber(done)
 	})
 
-	it('The db should be empty', async () => {
+	it('The test should not leave data in DB', async () => {
 		await rpCheckUser()
 	})
 })
 
 describe('API Test End: ', () => {
-	it('The db should be empty', async () => {
+	it('The test should not leave data in DB', async () => {
 		await rpCheckUser()
 	})
 })

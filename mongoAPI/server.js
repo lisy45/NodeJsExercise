@@ -36,23 +36,14 @@ app.use(session({
 }))
 
 async function checkUser(req, res) {
-	const count = await User.countDocuments({})
-	if (count === 0) res.send('success')
+	const name = req.params.username
+	const existed = await User.findOne({ name })
+	if (!existed) res.send('success')
 	else res.send('fail')
 }
 
-app.post('/checkUser', (req, res) => {
+app.post('/checkUser/:username', (req, res) => {
 	checkUser(req, res)
-})
-
-async function checkNumber(req, res) {
-	const count = await number.countDocuments({})
-	if (count === 0) res.send('success')
-	else res.send('fail')
-}
-
-app.post('/checkNumber', (req, res) => {
-	checkNumber(req, res)
 })
 
 async function register(req, res) {
