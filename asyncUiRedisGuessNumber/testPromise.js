@@ -1,29 +1,15 @@
 const rp = require('request-promise')
 
-function postPromise(guess) {
-	return new Promise((resolve, reject) => {
-		rp.post(`http://127.0.0.1:3000/${guess}`)
-			.then((res) => {
-				console.log(`Guess:${guess} /:number returns ${res}`)
-				if (res === 'equal') {
-					console.log('Auto play completes')
-					resolve(guess)
-				} else reject(res)
-			})
-	})
-}
-
 function guessPromise(low, up) {
 	return new Promise((resolve) => {
 		function recur(l, u) {
 			const guess = Math.round((l + u) / 2)
-			postPromise(guess)
+			rp.post(`http://127.0.0.1:3000/${guess}`)
 				.then((res) => {
-					resolve(res)
-				})
-				.catch((res) => {
+					console.log(`Guess:${guess} /:number returns ${res}`)
 					if (res === 'bigger') recur(l, guess)
 					else if (res === 'smaller') recur(guess, u)
+					else resolve(guess)
 				})
 		}
 		recur(low, up)
@@ -37,7 +23,7 @@ function playByPromise() {
 			if (res === 'OK') {
 				console.log('/start returns OK')
 				guessPromise(0, 1000000).then((result) => {
-					console.log(`Number is ${result}`)
+					console.log(`Answer is ${result}`)
 				})
 			} else console.log('/start fails')
 		})
