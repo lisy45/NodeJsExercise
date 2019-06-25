@@ -106,32 +106,42 @@ describe('API Test 2: /login', () => {
 	})
 })
 
-async function rpStart(done) {
-	const res1 = await rp(optionRegisterSuccess)
-	res1.should.eql('success')
-	request(optionLoginSuccess, (err, res2, body) => {
-		body.should.eql('Hello admin')
-		const optionStart = {
-			method: 'POST',
-			uri: 'http://127.0.0.1:3000/start',
-			headers: {
-				'content-type': 'application/x-www-form-urlencoded',
-				Cookie: res2.headers['set-cookie'],
-			},
-		}
-		rp(optionStart).then((res3) => {
-			res3.should.eql('success')
-			rp.delete('http://127.0.0.1:3000/deleteuser/admin').then((res4) => {
-				res4.should.eql('The user is successfully deleted.')
-				done()
-			})
+function doRequest(opt) {
+	return new Promise((resolve, reject) => {
+		request(opt, (err, res, body) => {
+			if (!err && res.statusCode === 200) {
+				const result = []
+				result.push(res)
+				result.push(body)
+				resolve(result)
+			} else reject(err)
 		})
 	})
 }
+async function rpStart() {
+	const res1 = await rp(optionRegisterSuccess)
+	res1.should.eql('success')
+	const result = await doRequest(optionLoginSuccess)
+	const res2 = result[0]
+	const body = result[1]
+	body.should.eql('Hello admin')
+	const optionStart = {
+		method: 'POST',
+		uri: 'http://127.0.0.1:3000/start',
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded',
+			Cookie: res2.headers['set-cookie'],
+		},
+	}
+	const res3 = await rp(optionStart)
+	res3.should.eql('success')
+	const res4 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin')
+	res4.should.eql('The user is successfully deleted.')
+}
 
 describe('API Test 3: /start', () => {
-	it('The response of /start should be success', (done) => {
-		rpStart(done)
+	it('The response of /start should be success', async () => {
+		await rpStart()
 	})
 
 	it('The test should not leave data in DB', async () => {
@@ -139,32 +149,41 @@ describe('API Test 3: /start', () => {
 	})
 })
 
-async function npNumber(done) {
+async function npNumber() {
 	const res1 = await rp(optionRegisterSuccess)
 	res1.should.eql('success')
-	request(optionLoginSuccess, (err, res2, body) => {
-		body.should.eql('Hello admin')
-		const optionNumber = {
-			method: 'POST',
-			uri: 'http://127.0.0.1:3000/50',
-			headers: {
-				'content-type': 'application/x-www-form-urlencoded',
-				Cookie: res2.headers['set-cookie'],
-			},
-		}
-		rp(optionNumber).then((res3) => {
-			['bigger', 'smaller', 'equal'].should.containEql(res3)
-			rp.delete('http://127.0.0.1:3000/deleteuser/admin').then((res4) => {
-				res4.should.eql('The user is successfully deleted.')
-				done()
-			})
-		})
-	})
+	const result = await doRequest(optionLoginSuccess)
+	const res2 = result[0]
+	const body = result[1]
+	body.should.eql('Hello admin')
+	const optionStart = {
+		method: 'POST',
+		uri: 'http://127.0.0.1:3000/start',
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded',
+			Cookie: res2.headers['set-cookie'],
+		},
+	}
+	const res3 = await rp(optionStart)
+	res3.should.eql('success')
+	const optionNumber = {
+		method: 'POST',
+		uri: 'http://127.0.0.1:3000/50',
+		headers: {
+			'content-type': 'application/x-www-form-urlencoded',
+			Cookie: res2.headers['set-cookie'],
+		},
+	}
+	const res4 = await rp(optionNumber)
+	const ans = ['bigger', 'smaller', 'equal']
+	ans.should.containEql(res4)
+	const res5 = await rp.delete('http://127.0.0.1:3000/deleteuser/admin')
+	res5.should.eql('The user is successfully deleted.')
 }
 
 describe('API Test 4: /:number', () => {
-	it('The response of /:number should be bigger/smaller/equal', (done) => {
-		npNumber(done)
+	it('The response of /:number should be bigger/smaller/equal', async () => {
+		await npNumber()
 	})
 
 	it('The test should not leave data in DB', async () => {
