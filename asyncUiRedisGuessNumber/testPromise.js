@@ -7,9 +7,7 @@ function guessPromise(low, up) {
 			console.log(`Guess:${guess} /:number returns ${res}`)
 			if (res === 'bigger') return guessPromise(low, guess)
 			if (res === 'smaller') return guessPromise(guess, up)
-			return new Promise((resolve) => {
-				resolve(guess)
-			})
+			return guess
 		})
 }
 
